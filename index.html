@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Franco Di Natale | Engineering Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FAFAFA;
+    --ink:#16181C;
+    --muted:#454B52;
+    --rule:#E2E4E7;
+    --accent:#2B5D74;
+    --accent-muted:#8FA7B3;
+    --accent-soft:#EAF1F4;
+    --maxw:1040px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background-color:var(--bg);
+    background-image:
+      linear-gradient(rgba(43,93,116,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(43,93,116,0.07) 1px, transparent 1px);
+    background-size:28px 28px;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .topbar{height:4px;background:var(--accent);}
+  .corner-mark{position:absolute;width:16px;height:16px;pointer-events:none;}
+  .corner-mark::before,.corner-mark::after{content:'';position:absolute;background:var(--accent);}
+  .corner-mark::before{width:16px;height:2px;}
+  .corner-mark::after{width:2px;height:16px;}
+  .corner-mark.tl{top:-1px;left:-1px;} .corner-mark.tl::before{top:0;left:0;} .corner-mark.tl::after{top:0;left:0;}
+  .corner-mark.tr{top:-1px;right:-1px;} .corner-mark.tr::before{top:0;right:0;} .corner-mark.tr::after{top:0;right:0;}
+  .corner-mark.bl{bottom:-1px;left:-1px;} .corner-mark.bl::before{bottom:0;left:0;} .corner-mark.bl::after{bottom:0;left:0;}
+  .corner-mark.br{bottom:-1px;right:-1px;} .corner-mark.br::before{bottom:0;right:0;} .corner-mark.br::after{bottom:0;right:0;}
+  .hero-frame{position:relative;border:1px solid var(--rule);padding:40px;background:var(--accent-soft);}
+  .hero-grid{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:24px;}
+  .hero-main{flex:1;min-width:280px;}
+  .hero-side{width:260px;flex-shrink:0;}
+  .title-block{
+    width:100%;
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    border:1px solid var(--rule);
+    font-family:'IBM Plex Mono',monospace;
+    background:var(--bg);
+  }
+  .tb-row{display:flex;flex-direction:column;padding:10px 14px;border-right:1px solid var(--rule);}
+  .tb-row:last-child{border-right:none;}
+  .tb-label{color:var(--accent);font-size:9.5px;letter-spacing:0.06em;margin-bottom:3px;}
+  .tb-val{color:var(--ink);font-size:12px;}
+  @media (max-width:640px){
+    .title-block{grid-template-columns:1fr 1fr;}
+    .tb-row{border-bottom:1px solid var(--rule);}
+    .tb-row:nth-child(2n){border-right:none;}
+  }
+  .section-head h2{position:relative;padding-left:16px;}
+  .section-head h2::before{content:'';position:absolute;left:0;top:6px;width:8px;height:8px;background:var(--accent);}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  a{color:var(--accent);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  a:focus-visible, button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+
+  header.site{
+    position:sticky;top:0;z-index:10;
+    background:rgba(250,250,250,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--rule);
+    border-top:1px solid var(--rule);
+  }
+  nav.wrap{display:flex;justify-content:space-between;align-items:center;height:64px;}
+  .brand{font-weight:600;font-size:15px;color:var(--ink);}
+  .brand:hover{text-decoration:none;}
+  .navlinks{display:flex;gap:28px;}
+  .navlinks a{color:var(--muted);font-size:14px;font-weight:500;}
+  .navlinks a:hover{color:var(--ink);text-decoration:none;}
+
+  .hero{padding:72px 0 56px;border-bottom:1px solid var(--rule);}
+  .hero .role{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);margin:0 0 18px;}
+  .hero h1{font-size:clamp(30px,5vw,42px);line-height:1.15;margin:0 0 18px;font-weight:700;letter-spacing:-0.01em;max-width:22ch;}
+  .hero p.lede{font-size:17px;color:var(--muted);max-width:56ch;margin:0 0 24px;}
+  .hero .links{display:flex;gap:20px;font-size:14px;}
+
+  section{padding:40px 0;border-bottom:1px solid var(--rule);}
+  section:last-of-type{border-bottom:none;}
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:28px;gap:16px;}
+  .section-head h2{font-size:21px;margin:0;font-weight:700;}
+  .section-head .count{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--muted);}
+  .section-head .hint{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);}
+
+  /* Project cards (accordion) */
+  .project-list{border-top:none;}
+  .project{
+    position:relative;
+    border:1.5px solid var(--accent-muted);
+    background:var(--accent-soft);
+    margin-bottom:16px;
+    padding:0 18px;
+    transition:border-color .15s;
+  }
+  .project:last-child{margin-bottom:0;}
+  .project::before,.project::after{
+    content:'';position:absolute;width:7px;height:7px;border-radius:50%;
+    background:var(--accent-muted);transition:background-color .15s;
+  }
+  .project::before{top:-4px;left:-4px;}
+  .project::after{bottom:-4px;right:-4px;}
+  .project:hover, .project.open{border-color:var(--accent);}
+  .project:hover::before,.project:hover::after,.project.open::before,.project.open::after{background:var(--accent);}
+  .project-trigger{
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    text-align:left;
+    padding:20px 0;
+    font-family:inherit;
+    color:inherit;
+  }
+  .project-trigger:hover .project-title{color:var(--accent);}
+  .project-trigger-text{flex:1;min-width:0;}
+  .project-title{font-size:18px;font-weight:600;margin:0 0 4px;transition:color .15s;}
+  .project-hook{font-size:14.5px;color:var(--muted);margin:0;}
+  .project-highlight{font-size:13px;font-weight:600;color:var(--accent);margin:5px 0 0;}
+  .project-meta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;color:var(--muted);
+    white-space:nowrap;
+    text-align:right;
+    flex-shrink:0;
+  }
+  .chevron{
+    flex-shrink:0;
+    width:18px;height:18px;
+    color:var(--muted);
+    transition:transform .2s ease;
+  }
+  .project.open .chevron{transform:rotate(45deg);color:var(--accent);}
+
+  .project-detail{
+    display:grid;
+    grid-template-rows:0fr;
+    transition:grid-template-rows .25s ease;
+  }
+  .project.open .project-detail{grid-template-rows:1fr;}
+  .project-detail-inner{overflow:hidden;}
+  .project-detail-content{padding:0 0 28px;}
+
+  .photo-slot{
+    border:1px dashed #C7CBD1;
+    background:var(--bg);
+    color:var(--accent);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    padding:14px;
+    text-align:center;
+    border-radius:2px;
+    margin-bottom:16px;
+  }
+  .photo-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:560px){.photo-row{grid-template-columns:1fr;}}
+
+  .media-frame{position:relative;border:1.5px solid var(--accent-muted);background:#fff;overflow:hidden;transition:border-color .15s;}
+  .media-frame:hover{border-color:var(--accent);}
+  .media-frame::before,.media-frame::after{content:'';position:absolute;width:6px;height:6px;border-radius:50%;background:var(--accent-muted);transition:background-color .15s;}
+  .media-frame::before{top:-3.5px;left:-3.5px;}
+  .media-frame::after{bottom:-3.5px;right:-3.5px;}
+  .media-frame:hover::before,.media-frame:hover::after{background:var(--accent);}
+  .media-frame img,.media-frame video{width:100%;height:100%;display:block;}
+  .photo-row .media-frame{aspect-ratio:4/3;}
+  .photo-row .media-frame img{object-fit:cover;}
+  .media-caption{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.03em;margin:7px 0 16px;}
+  .figure-row{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:4px;}
+  .figure-row figure{flex:1;min-width:260px;margin:0;}
+  .figure-row figure .media-caption{margin:7px 0 0;}
+  .sheet-num{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:0.07em;margin-bottom:3px;text-align:right;}
+  @media (max-width:640px){.hero-side{width:100%;}}
+
+  .project-detail-content ul{margin:0 0 14px;padding-left:20px;color:var(--muted);font-size:15px;}
+  .project-detail-content ul li{margin-bottom:6px;}
+  .project-detail-content ul li::marker{color:var(--accent);}
+  .todo-note{font-size:13.5px;color:var(--muted);}
+
+  /* Experience */
+  .job-list{border-top:none;}
+  .job{
+    position:relative;
+    border:1.5px solid var(--accent-muted);
+    background:var(--accent-soft);
+    margin-bottom:12px;
+    padding:0 16px;
+    transition:border-color .15s;
+  }
+  .job:last-child{margin-bottom:0;}
+  .job::before,.job::after{
+    content:'';position:absolute;width:6px;height:6px;border-radius:50%;
+    background:var(--accent-muted);transition:background-color .15s;
+  }
+  .job::before{top:-3.5px;left:-3.5px;}
+  .job::after{bottom:-3.5px;right:-3.5px;}
+  .job:hover, .job.open{border-color:var(--accent);}
+  .job:hover::before,.job:hover::after,.job.open::before,.job.open::after{background:var(--accent);}
+  .job-trigger{
+    width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;
+    background:none;border:none;cursor:pointer;text-align:left;padding:16px 0;
+    font-family:inherit;color:inherit;
+  }
+  .job-trigger:hover .job-title{color:var(--accent);}
+  .job-title{font-size:15.5px;font-weight:600;margin:0 0 2px;transition:color .15s;}
+  .job-place{font-size:13.5px;color:var(--muted);margin:0;}
+  .job-date{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);white-space:nowrap;text-align:right;flex-shrink:0;}
+  .job-detail{display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s ease;}
+  .job.open .job-detail{grid-template-rows:1fr;}
+  .job-detail-inner{overflow:hidden;}
+  .job-detail-content{padding:0 0 20px;}
+  .job-detail-content ul{margin:0;padding-left:20px;color:var(--muted);font-size:14.5px;}
+  .job-detail-content ul li{margin-bottom:5px;}
+  .job-detail-content ul li::marker{color:var(--accent);}
+  .job.open .chevron{transform:rotate(45deg);color:var(--accent);}
+
+  /* Skills */
+  .skills-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px 32px;}
+  @media (max-width:560px){.skills-grid{grid-template-columns:1fr;}}
+  .skill-cat h4{font-size:13px;color:var(--accent);margin:0 0 8px;font-weight:600;}
+  .skill-cat p{margin:0;color:var(--muted);font-size:14.5px;}
+
+  .contact p{color:var(--muted);max-width:50ch;}
+  .contact .links{display:flex;gap:24px;margin-top:12px;font-size:15px;}
+  footer{padding:32px 0 64px;color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+<div class="topbar"></div>
+
+<header class="site">
+  <nav class="wrap">
+    <a href="#top" class="brand">Franco Di Natale</a>
+    <div class="navlinks">
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="top">
+    <div class="wrap">
+      <div class="hero-frame">
+        <span class="corner-mark tl"></span>
+        <span class="corner-mark tr"></span>
+        <span class="corner-mark bl"></span>
+        <span class="corner-mark br"></span>
+        <div class="hero-grid">
+          <div class="hero-main">
+            <p class="role">Automation Systems Engineering, McMaster University</p>
+            <h1>Franco Di Natale</h1>
+            <p class="lede">B.Tech at McMaster University, concurrently completing an Advanced Diploma in Chemical Engineering Technology through Mohawk College. I work across mechanical design, controls, and fabrication.</p>
+            <div class="links">
+              <a href="#projects">See projects &rarr;</a>
+              <a href="Franco-Di-Natale-Resume.pdf" target="_blank">Resume (PDF)</a>
+              <a href="mailto:dinatalefranco5@gmail.com">Email</a>
+              <a href="https://www.linkedin.com/in/franco-di-natale/" target="_blank" rel="noopener">LinkedIn</a>
+            </div>
+          </div>
+          <div class="hero-side">
+            <div class="media-frame" style="height:270px;">
+              <img src="franco-pumpkin-headshot.jpg" alt="Franco Di Natale with the Pumpkin Chunkin trebuchet" style="object-fit:cover;object-position:50% 30%;">
+            </div>
+          </div>
+        </div>
+        <div class="title-block">
+          <div class="tb-row"><span class="tb-label">NAME</span><span class="tb-val">Franco Di Natale</span></div>
+          <div class="tb-row"><span class="tb-label">PROGRAM</span><span class="tb-val">B.Tech, Automation Systems Eng.</span></div>
+          <div class="tb-row"><span class="tb-label">INSTITUTION</span><span class="tb-val">McMaster University</span></div>
+          <div class="tb-row"><span class="tb-label">FOCUS</span><span class="tb-val">Mechanical, Process Efficiency, Controls</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" style="padding:32px 0;">
+    <div class="wrap">
+      <div style="border:1.5px solid var(--accent-muted);background:var(--accent-soft);padding:20px 24px;">
+        <p style="color:var(--muted);font-size:15px;line-height:1.65;margin:0;">Automation Systems Engineering combines mechanical design, controls, and manufacturing systems, with a strong lab and hands-on project component. Alongside it, I'm completing an Advanced Diploma in Chemical Engineering Technology through Mohawk College, giving me coursework spanning mechanical fundamentals, PLC-based automation, process engineering, and fabrication. What draws me to the field is that gap between designing something and getting it to actually perform under real constraints &mdash; every project below started as a CAD model and ended up getting tested, broken, and rebuilt until it worked.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Featured Projects</h2>
+        <span class="hint">click to expand</span>
+      </div>
+
+      <div class="project-list">
+
+        <!-- Project 1 -->
+        <div class="project">
+          <button class="project-trigger" aria-expanded="false">
+            <span class="project-trigger-text">
+              <p class="project-title">McMaster Pumpkin Chunkin: Senior Launch Design Lead</p>
+              <p class="project-hook">Redesigned a competition flywheel trebuchet for reliability, averaging ~50 m launches in testing.</p>
+              <p class="project-highlight">Only human-powered launcher in the competition</p>
+            </span>
+            <span class="project-meta">2025–Present</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <div class="project-detail-content">
+                <div class="media-frame">
+                  <video autoplay muted loop playsinline preload="auto" poster="pumpkin-launch-poster.jpg" style="background:#000;">
+                    <source src="pumpkin-launch.mp4" type="video/mp4">
+                  </video>
+                </div>
+                <p class="media-caption">FIG. 01 &mdash; Launch test, 2025</p>
+                <div class="media-frame">
+                  <img src="pumpkin-flywheel-cad.png" alt="CAD model of the flywheel launch structure, isolated view" style="background:#fff;">
+                </div>
+                <p class="media-caption">FIG. 02 &mdash; Flywheel assembly, isolated CAD view, 2026</p>
+                <ul>
+                  <li>Worked from a single reference video with no other documentation available; core mechanics had to be reverse-engineered and validated through iterative prototyping and testing.</li>
+                  <li>Designed a ~140 cm, ~50 lb flywheel structure around standard 2×4 lumber, revising geometry and brackets to cut cost and improve stability.</li>
+                  <li>Diagnosed a failure in the spring-loaded actuator during final testing and redesigned it from aluminum to steel with a neutral-return spring the night before competition, then ran the full event without a single issue.</li>
+                  <li>Powered the flywheel with a bicycle drivetrain and custom gear ratios, human-powered rather than motor-driven — the only launcher in the competition built this way.</li>
+                </ul>
+                <p class="media-caption"><a href="https://www.linkedin.com/in/mcmaster-engineering-pumpkin-chunkin-bb53a0414/" target="_blank" rel="noopener">McMaster Pumpkin Chunkin on LinkedIn &rarr;</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="project">
+          <button class="project-trigger" aria-expanded="false">
+            <span class="project-trigger-text">
+              <p class="project-title">McMaster Aerospace Team: Payload &amp; Landing Gear Design</p>
+              <p class="project-hook">Designed payload retention and landing gear for a competition aircraft under a strict weight budget.</p>
+              <p class="project-highlight">Placed 11th of 35 universities worldwide</p>
+            </span>
+            <span class="project-meta">Design Engineer<br>2025–Present</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <div class="project-detail-content">
+                <div class="photo-row">
+                  <div class="media-frame">
+                    <img src="aerospace-flight.jpg" alt="Competition aircraft in flight" style="background:#fff;">
+                  </div>
+                  <div class="media-frame">
+                    <img src="landing-gear-components.jpg" alt="Landing gear wheel assemblies and hardware" style="background:#fff;">
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;gap:12px;">
+                  <p class="media-caption">FIG. 01 &mdash; Competition aircraft in flight</p>
+                  <p class="media-caption">FIG. 02 &mdash; Landing gear assembly</p>
+                </div>
+                <ul>
+                  <li>Placed 11th out of 35 universities from around the world at competition.</li>
+                  <li>Developed a quick-release payload retention system removable in ~40 seconds, well within the 60-second competition limit.</li>
+                  <li>Co-developed a drop-test rig to validate a landing-gear redesign that reduced weight compared to the previous year's design.</li>
+                  <li>Selected a fill-material configuration for the payload bottles that met volume requirements while preventing internal movement.</li>
+                  <li>Built an Excel mass-budgeting tool to compare payload layouts across configurations.</li>
+                  <li>Contributed to a ~50-page SAE Aero Design technical report, rationalizing every design decision against alternatives, constraints, and test results for formal submission.</li>
+                </ul>
+                <p class="media-caption"><a href="https://mcmasteraerospace.com/about.html" target="_blank" rel="noopener">McMaster Aerospace Team &rarr;</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="project">
+          <button class="project-trigger" aria-expanded="false">
+            <span class="project-trigger-text">
+              <p class="project-title">Command-Line Chess Game</p>
+              <p class="project-hook">A two-player chess engine in C++, selected as top project of the term.</p>
+            </span>
+            <span class="project-meta mono">C++ · Visual Studio</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="project-detail">
+            <div class="project-detail-inner">
+              <div class="project-detail-content">
+                <div style="display:flex;justify-content:center;">
+                  <div class="media-frame" style="max-width:320px;width:100%;">
+                    <img src="chess-screenshot.png" alt="Terminal chess game showing checkmate detection" style="background:#000;">
+                  </div>
+                </div>
+                <p class="media-caption" style="text-align:center;">FIG. 01 &mdash; Terminal output, checkmate detection</p>
+                <ul>
+                  <li>Co-developed a two-player chess engine with a partner in object-oriented C++, structuring piece behavior through inheritance with full move validation, turn handling, pawn promotion, and checkmate detection.</li>
+                  <li>Built a color-coded Unicode board interface for terminal play.</li>
+                  <li>Selected by the professor as the best project of the term and awarded a bonus grade.</li>
+                </ul>
+                <p class="media-caption"><a href="https://github.com/Ronnie4315/realgameofchess" target="_blank" rel="noopener">View on GitHub &rarr;</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Experience</h2>
+        <span class="hint">click to expand</span>
+      </div>
+
+      <p class="mono" style="font-size:12px;color:var(--accent);letter-spacing:0.06em;margin:0 0 10px;font-weight:600;">PROFESSIONAL EXPERIENCE</p>
+      <div class="job-list">
+
+        <div class="job">
+          <button class="job-trigger" aria-expanded="false">
+            <span>
+              <p class="job-title">Production &amp; Manufacturing Co-op</p>
+              <p class="job-place"><img src="roseland-logo.png" alt="" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px;">Roseland Building Materials, Oakville ON</p>
+            </span>
+            <span class="job-date">05/2026 – 08/2026</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="job-detail">
+            <div class="job-detail-inner">
+              <div class="job-detail-content">
+                <ul>
+                  <li>Drove equipment and workflow improvements during ramp-up of a new wood door manufacturing operation, contributing to a ~70% increase in peak output.</li>
+                  <li>Optimized glue-spreader feed speed and roller gap, doubling throughput and cutting glue refills from 3+ to 1 per batch.</li>
+                  <li>Investigated warping, bond failures, and telegraphing through controlled test builds, varying glue paste, press cycle time, and setup; inspected failure patterns to refine production settings.</li>
+                  <li>Diagnosed and corrected CNC sensor and cutting-alignment issues, restoring normal process speed and avoiding a major production delay ahead of a next-day customer shipment.</li>
+                </ul>
+                <p class="media-caption"><a href="https://roselandbuildingmaterials.com/" target="_blank" rel="noopener">Roseland Building Materials &rarr;</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="job">
+          <button class="job-trigger" aria-expanded="false">
+            <span>
+              <p class="job-title">Residential Exterior Installer (Co-op)</p>
+              <p class="job-place"><img src="desis-logo.png" alt="" style="height:16px;vertical-align:-3px;margin-right:6px;">Desi's Renovations, Burlington ON</p>
+            </span>
+            <span class="job-date">06/2023 – 08/2023</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="job-detail">
+            <div class="job-detail-inner">
+              <div class="job-detail-content">
+                <ul>
+                  <li>Measured, cut, formed, and installed aluminum soffit and fascia independently across five residential renovation projects.</li>
+                  <li>Translated field measurements into custom part geometry, fabricating components on a sheet-metal brake, circular saw, and snips.</li>
+                  <li>Diagnosed a recurring flooding issue and redesigned the downspout discharge path to resolve it.</li>
+                  <li>Took on independent fabrication of non-standard components after demonstrating consistent accuracy on standard installs.</li>
+                </ul>
+                <p class="media-caption"><a href="https://www.desisrenovations.ca/" target="_blank" rel="noopener">Desi's Renovations &rarr;</a></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <p class="mono" style="font-size:12px;color:var(--accent);letter-spacing:0.06em;margin:28px 0 10px;font-weight:600;">LABS &amp; COURSEWORK</p>
+      <div class="job-list">
+
+        <div class="job">
+          <button class="job-trigger" aria-expanded="false">
+            <span>
+              <p class="job-title">PLC Controls Laboratory Projects</p>
+              <p class="job-place">McMaster University</p>
+            </span>
+            <span class="job-date mono">RSLogix 5000</span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="job-detail">
+            <div class="job-detail-inner">
+              <div class="job-detail-content">
+                <div class="figure-row">
+                  <figure>
+                    <div class="media-frame">
+                      <img src="ladder-logic-1.png" alt="Ladder logic diagram for motor sequencing, rungs 0-6" style="background:#fff;">
+                    </div>
+                    <figcaption class="media-caption">FIG. 01 &mdash; Motor sequencing ladder logic (rungs 0&ndash;6)</figcaption>
+                  </figure>
+                  <figure>
+                    <div class="media-frame">
+                      <img src="ladder-logic-2.png" alt="Ladder logic diagram for motor sequencing, rungs 7-10" style="background:#fff;">
+                    </div>
+                    <figcaption class="media-caption">FIG. 02 &mdash; Motor sequencing ladder logic (rungs 7&ndash;10)</figcaption>
+                  </figure>
+                </div>
+                <ul>
+                  <li>Programmed and tested ladder-logic control systems on Allen-Bradley PLC trainers for traffic-control, tank-level, and detection exercises.</li>
+                  <li>Developed start/stop seal circuits, interlocks, timers, counters, and program-flow routines.</li>
+                  <li>Interfaced PLC I/O with 7-segment displays and thumbwheel switches using BCD conversion.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="job">
+          <button class="job-trigger" aria-expanded="false">
+            <span>
+              <p class="job-title">Chemical Engineering Laboratory Experience</p>
+              <p class="job-place">McMaster University</p>
+            </span>
+            <span class="job-date"></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+          <div class="job-detail">
+            <div class="job-detail-inner">
+              <div class="job-detail-content">
+                <div class="figure-row">
+                  <figure>
+                    <div class="media-frame">
+                      <img src="chem-pid-diagram.png" alt="P&amp;ID schematic of the distillation column lab apparatus" style="background:#fff;">
+                    </div>
+                    <figcaption class="media-caption">FIG. 01 &mdash; Distillation column P&amp;ID</figcaption>
+                  </figure>
+                  <figure>
+                    <div class="media-frame">
+                      <img src="chem-hmi-screenshot.png" alt="DeltaV Operate HMI screen for a fluid flow control system" style="background:#fff;">
+                    </div>
+                    <figcaption class="media-caption">FIG. 02 &mdash; DeltaV HMI, fluid flow control</figcaption>
+                  </figure>
+                </div>
+                <ul>
+                  <li>Operated lab process equipment across dosing-pump, precipitation, filter-press, fluid-flow, and distillation experiments.</li>
+                  <li>Measured pressure, temperature, and flow; quantified loss coefficients against theoretical values.</li>
+                  <li>Processed large experimental datasets in Excel, using formulas to repeat calculations across datasets and building dynamic charts, then produced formal technical reports analyzing the results and quantifying uncertainty.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head"><h2>Technical Skills</h2></div>
+      <div class="skills-grid">
+        <div class="skill-cat">
+          <h4>CAD &amp; Design</h4>
+          <p>SolidWorks (parts, assemblies, manufacturing drawings), AutoCAD, design for manufacturability, BOM development</p>
+        </div>
+        <div class="skill-cat">
+          <h4>Controls &amp; Automation</h4>
+          <p>RSLogix 5000, Ladder Logic, Allen-Bradley PLCs, discrete I/O, hardware wiring &amp; troubleshooting</p>
+        </div>
+        <div class="skill-cat">
+          <h4>Programming</h4>
+          <p>C++, object-oriented programming, debugging, command-line application development</p>
+        </div>
+        <div class="skill-cat">
+          <h4>Manufacturing &amp; Fabrication</h4>
+          <p>CNC operation, machine setup &amp; calibration, sheet-metal fabrication, component assembly, quality inspection</p>
+        </div>
+        <div class="skill-cat">
+          <h4>Testing &amp; Analysis</h4>
+          <p>Mass budgeting, process optimization, prototype testing, failure analysis, technical documentation</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap contact">
+      <div class="section-head"><h2>Contact</h2></div>
+      <p>Open to co-op and internship opportunities in mechanical design, automation, and manufacturing engineering.</p>
+      <div class="links">
+        <a href="Franco-Di-Natale-Resume.pdf" target="_blank">Resume (PDF)</a>
+        <a href="mailto:dinatalefranco5@gmail.com">Email</a>
+        <a href="https://www.linkedin.com/in/franco-di-natale/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">Franco Di Natale, Automation Systems Engineering, McMaster University</div>
+</footer>
+
+<script>
+  function setupAccordion(triggerSel, itemSel, exclusive){
+    document.querySelectorAll(triggerSel).forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const item = btn.closest(itemSel);
+        const isOpen = item.classList.contains('open');
+        if(exclusive){
+          item.parentElement.querySelectorAll(itemSel).forEach(i=>{
+            i.classList.remove('open');
+            i.querySelector(triggerSel).setAttribute('aria-expanded','false');
+          });
+        }
+        if(!isOpen){
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded','true');
+        } else {
+          item.classList.remove('open');
+          btn.setAttribute('aria-expanded','false');
+        }
+      });
+    });
+  }
+  setupAccordion('.project-trigger', '.project', false);
+  setupAccordion('.job-trigger', '.job', false);
+</script>
+
+</body>
+</html>
