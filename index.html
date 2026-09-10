@@ -241,6 +241,40 @@
   .contact p{color:var(--muted);max-width:50ch;}
   .contact .links{display:flex;gap:24px;margin-top:12px;font-size:15px;}
   footer{padding:32px 0 64px;color:var(--muted);font-size:13px;}
+@media print {
+  /* Force every accordion open so content isn't zero-height in the printed output */
+  .project-detail, .job-detail { display: block !important; grid-template-rows: none !important; }
+  .project-detail-inner, .job-detail-inner { overflow: visible !important; }
+  .project-detail-content, .job-detail-content { padding-bottom: 16px !important; }
+
+  /* Hide interactive-only chrome that means nothing on paper */
+  header.site { position: static !important; }
+  .hint, .chevron { display: none !important; }
+  a[href^="mailto:"]::after, a[target="_blank"]::after { content: none !important; }
+
+  /* Keep cards, figures, and images from splitting across a page break */
+  .project, .job, .hero-frame, figure, .media-frame,
+  .skill-cat, .job-detail-content ul, .project-detail-content ul {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Never leave a heading stranded alone at the bottom of a page */
+  h1, h2, h3, .project-title, .job-title, .section-head {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Section dividers shouldn't force a fresh page, just avoid splitting the border oddly */
+  section { break-inside: auto; }
+
+  /* Video: browsers print the current/poster frame automatically, no override needed */
+
+  /* Drop shadows/backdrops that only make sense on screen */
+  .corner-mark, .origin-mark { display: none !important; }
+
+  body { background-image: none !important; }
+}
 </style>
 </head>
 <body>
@@ -298,7 +332,7 @@
   <section id="about" style="padding:32px 0;">
     <div class="wrap">
       <div style="border:1.5px solid var(--accent-muted);background:var(--accent-soft);padding:20px 24px;">
-        <p style="color:var(--muted);font-size:15px;line-height:1.65;margin:0;">Automation Systems Engineering combines mechanical design, controls, and manufacturing systems, with a strong lab and hands-on project components. Alongside it, I'm completing an Advanced Diploma in Chemical Engineering Technology through Mohawk College, giving me coursework spanning mechanical fundamentals, PLC-based automation, process engineering, and fabrication. What draws me to the field is that gap between designing something and getting it to actually perform under real constraints; Every project below started as a CAD model and ended up getting tested, broken, and rebuilt until it worked.</p>
+        <p style="color:var(--muted);font-size:15px;line-height:1.65;margin:0;">Automation Systems Engineering combines mechanical design, controls, and manufacturing systems, with a strong lab and hands-on project component. Alongside it, I'm completing an Advanced Diploma in Chemical Engineering Technology through Mohawk College, giving me coursework spanning mechanical fundamentals, PLC-based automation, process engineering, and fabrication. What draws me to the field is that gap between designing something and getting it to actually perform under real constraints &mdash; every project below started as a CAD model and ended up getting tested, broken, and rebuilt until it worked.</p>
       </div>
     </div>
   </section>
@@ -340,7 +374,7 @@
                   <li>Worked from a single reference video with no other documentation available; core mechanics had to be reverse-engineered and validated through iterative prototyping and testing.</li>
                   <li>Designed a ~140 cm, ~50 lb flywheel structure around standard 2×4 lumber, revising geometry and brackets to cut cost and improve stability.</li>
                   <li>Diagnosed a failure in the spring-loaded actuator during final testing and redesigned it from aluminum to steel with a neutral-return spring the night before competition, then ran the full event without a single issue.</li>
-                  <li>Powered the flywheel with a bicycle drivetrain and custom gear ratios, human-powered rather than motor-driven, the only launcher in the competition built this way.</li>
+                  <li>Powered the flywheel with a bicycle drivetrain and custom gear ratios, human-powered rather than motor-driven — the only launcher in the competition built this way.</li>
                 </ul>
                 <p class="media-caption"><a href="https://www.linkedin.com/in/mcmaster-engineering-pumpkin-chunkin-bb53a0414/" target="_blank" rel="noopener">McMaster Pumpkin Chunkin on LinkedIn &rarr;</a></p>
               </div>
